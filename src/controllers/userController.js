@@ -87,7 +87,7 @@ class userController {
     // getAll users function
     static getAllUsers = async (req, res) => {
         try {
-            const getAll = await userModel.find(req.body);
+            const getAll = await userModel.find(req.params.id);
 
             // check if any users found
             if (getAll.length === 0) {
