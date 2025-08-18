@@ -1,9 +1,11 @@
-import express from 'express';
-const app = express();
-
 // dotenv setup 
 import dotenv from 'dotenv';
 dotenv.config();
+
+
+import express from 'express';
+const app = express();
+
 
 import userRouter from './src/routes/userRoutes.js';
 import productRouter from './src/routes/productRoutes.js';
@@ -45,7 +47,7 @@ app.use('/api/v1/address', addressRouter);
 app.use('/api/v1/order', orderRouter);
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`http:localhost:${port}`)
 });

@@ -7,7 +7,7 @@ const isAuth = async (req, res, next) => {
         return res.status(401).json({ message: "Token N/A" });
     };
     try {
-        const decodeData = jwt.verify(token, process.env.JWt_TOKEN);
+        const decodeData = jwt.verify(token, process.env.JWT_TOKEN);
         req.user = await userModel.findById(decodeData._id)
         next();
     } catch (error) {
