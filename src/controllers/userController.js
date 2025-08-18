@@ -87,10 +87,10 @@ class userController {
     // getAll users function
     static getAllUsers = async (req, res) => {
         try {
-            const getAll = await userModel.find(req.user._id);
+            const getAll = await userModel.find(req.params.id);
 
             // check if any users found
-            if (getAll.length === 0) {
+            if (!getAll || getAll.length === 0) {
                 return res.status(404).json({ message: "No users found" });
             }
             res.status(200).json({ message: "Users retrieved successfully", users: getAll });
@@ -102,7 +102,7 @@ class userController {
     // getSingleUser 
     static getSingleUser = async (req, res) => {
         try {
-            const getSingle = await userModel.findById(req.user._id);
+            const getSingle = await userModel.findById(req.params.id);
 
             // check if any users found
             if (!getSingle) {

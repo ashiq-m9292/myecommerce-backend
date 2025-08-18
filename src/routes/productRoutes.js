@@ -5,7 +5,7 @@ import { upload } from '../middleWare/multer.js';
 import isAuth from '../middleWare/authMiddleware.js';
 
 
-productRouter.post('/productregister', isAuth, upload.array("images"), productControll.createProduct);
+productRouter.post('/createproduct', isAuth, upload.array("images"), productControll.createProduct);
 productRouter.get('/getsingleproduct/:id', isAuth, productControll.getSingleProduct);
 productRouter.get('/getallproducts', isAuth, productControll.getAllProducts);
 productRouter.delete('/deleteproduct/:id', isAuth, productControll.deleteProduct);
