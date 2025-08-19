@@ -8,7 +8,7 @@ import { upload } from '../middleWare/multer.js';
 
 userRouter.post('/createuser', userController.registerUser);
 userRouter.post('/loginuser', userController.loginUser);
-userRouter.get('/logoutuser/:id', isAuth, userController.logoutUser);
+userRouter.post('/logoutuser/:id', isAuth, userController.logoutUser);
 userRouter.get('/getalluser', isAuth, userController.getAllUsers);
 userRouter.get('/getsingleuser/:id', isAuth, userController.getSingleUser);
 userRouter.delete('/deleteuser/:id', isAuth, userController.deleteUser);
