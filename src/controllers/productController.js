@@ -65,7 +65,7 @@ class productControll {
     // get All products 
     static getAllProducts = async (req, res) => {
         try {
-            const products = await productModel.find(req.body);
+            const products = await productModel.find();
             res.status(200).json(products);
         } catch (error) {
             res.status(500).json({ message: "Error fetching products", error: error.message });
@@ -93,9 +93,6 @@ class productControll {
     static updateProduct = async (req, res) => {
         try {
             const { name, price, description, category, stock } = req.body;
-            if (!name || !price || !description || !category || !stock) {
-                return res.status(400).json({ message: "All fields are required" });
-            }
             const product = await productModel.findByIdAndUpdate(req.params.id);
             if (!product) {
                 return res.status(404).json({ message: "Product not found" });

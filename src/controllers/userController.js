@@ -24,7 +24,7 @@ class userController {
                 readableDate: readableDate
             });
             await newUser.save();
-            res.status(201).json({ message: "User registered successfully", user: newUser });
+            res.status(201).json({ message: "User created successfully", user: newUser });
         } catch (error) {
             res.status(500).json({ message: "Error registering user", error: error.message });
         }
@@ -56,7 +56,7 @@ class userController {
                 secure: 'true',
                 sameSite: 'strict',
                 maxAge: 10 * 60 * 1000 // 10 minutes
-            }).status(200).json({ message: "User logged in successfully", user: existingUser, token: token });
+            }).status(200).json({ message: "User login successfully", user: existingUser, token: token });
         } catch (error) {
             res.status(500).json({ message: "Error logging in user", error: error.message });
         }
@@ -66,12 +66,6 @@ class userController {
     // logout User function
     static logoutUser = async (req, res) => {
         try {
-            // check user id 
-            const userId = await userModel.findById(req.params.id);
-            if (!userId) {
-                return res.status(404).json({ message: "User not found" });
-            };
-
             if (!req.cookies.token) {
                 return res.status(400).json({ message: "No user is logged in" });
             };
@@ -87,7 +81,7 @@ class userController {
     // getAll users function
     static getAllUsers = async (req, res) => {
         try {
-            const getAll = await userModel.find(req.params.id);
+            const getAll = await userModel.find().select("-password");
 
             // check if any users found
             if (!getAll || getAll.length === 0) {
@@ -117,11 +111,11 @@ class userController {
     // updateUser function
     static updateUser = async (req, res) => {
         try {
+            const { name, email } = req.body;
             const updateUser = await userModel.findByIdAndUpdate(req.params.id);
             if (!updateUser) {
                 return res.status(404).json({ message: "User not found" });
             };
-            const { name, email } = req.body;
             if (name) updateUser.name = name;
             if (email) updateUser.email = email;
             await updateUser.save();
@@ -150,13 +144,16 @@ class userController {
     // update password function
     static updatePassword = async (req, res) => {
         try {
-            const user = await userModel.findById(req.user.id);
             const { oldPassword, newPassword } = req.body;
             if (!oldPassword || !newPassword) {
                 return res.json({
                     massage: "please fill all field"
                 })
             }
+            const user = await userModel.findByIdAndUpdate(req.user.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            };
             const isMatch = await user.comparePassword(oldPassword)
             if (!isMatch) {
                 return res.json({
@@ -178,7 +175,7 @@ class userController {
     static updateProfilePicture = async (req, res) => {
         try {
             // check if user exists
-            const user = await userModel.findById(req.params.id);
+            const user = await userModel.findByIdAndUpdate(req.params.id);
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             };

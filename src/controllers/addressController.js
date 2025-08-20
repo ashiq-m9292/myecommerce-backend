@@ -25,7 +25,7 @@ class AddressController {
     // get all address 
     static getAllAddresses = async (req, res) => {
         try {
-            const addresses = await address.find(req.body);
+            const addresses = await address.find();
             if (!addresses || addresses.length === 0) {
                 return res.status(404).json({ message: 'No addresses found' });
             }
