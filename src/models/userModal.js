@@ -53,7 +53,7 @@ userSchema.methods.comparePassword = async function (plainPassword) {
 
 // jwt token function 
 userSchema.methods.jwtToken = function () {
-    return jwt.sign({ _id: this._id }, process.env.JWT_TOKEN, { expiresIn: 10 * 60 * 1000 });
+    return jwt.sign({ _id: this._id }, process.env.JWT_TOKEN, { expiresIn: 1 * 30 * 24 * 60 * 60 });
 };
 
 

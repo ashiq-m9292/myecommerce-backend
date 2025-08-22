@@ -12,8 +12,9 @@ userRouter.post('/logoutuser', isAuth, userController.logoutUser);
 userRouter.get('/getalluser', isAuth, userController.getAllUsers);
 userRouter.get('/getsingleuser/:id', isAuth, userController.getSingleUser);
 userRouter.delete('/deleteuser/:id', isAuth, userController.deleteUser);
-userRouter.put('/updateuser/:id', isAuth, userController.updateUser);
-userRouter.put('/updatepassword/:id', isAuth, userController.updatePassword);
-userRouter.put('/updateprofilepicture/:id', isAuth, upload.single("image"), userController.updateProfilePicture);
+userRouter.get('/getuserprofile', isAuth, userController.getUserProfile);
+userRouter.put('/updateuserprofile', isAuth, userController.updateUser);
+userRouter.put('/updateuserpassword', isAuth, userController.updatePassword);
+userRouter.put('/updateuserprofilepicture', isAuth, upload.single("image"), userController.updateProfilePicture);
 
 export default userRouter;

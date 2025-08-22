@@ -55,7 +55,7 @@ class userController {
                 httpOnly: true,
                 secure: 'true',
                 sameSite: 'strict',
-                maxAge: 10 * 60 * 1000 // 10 minutes
+                maxAge: 1 * 30 * 24 * 60 * 60 * 1000, // 1 month
             }).status(200).json({ message: "User login successfully", _id: existingUser._id, name: existingUser.name, email: existingUser.email, token });
         } catch (error) {
             res.status(500).json({ message: "Error logging in user", error: error.message });
@@ -108,11 +108,24 @@ class userController {
         }
     }
 
+    // get user profile
+    static getUserProfile = async (req, res) => {
+        try {
+            const user = await userModel.findById(req.user.id).select("-password");
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            res.status(200).json({ message: "User profile retrieved successfully", user });
+        } catch (error) {
+            res.status(500).json({ message: "Error retrieving user profile", error: error.message });
+        }
+    };
+
     // updateUser function
     static updateUser = async (req, res) => {
         try {
             const { name, email } = req.body;
-            const updateUser = await userModel.findByIdAndUpdate(req.params.id);
+            const updateUser = await userModel.findByIdAndUpdate(req.user.id);
             if (!updateUser) {
                 return res.status(404).json({ message: "User not found" });
             };
@@ -129,7 +142,7 @@ class userController {
     // deleteUser function
     static deleteUser = async (req, res) => {
         try {
-            const deleteUser = await userModel.findByIdAndDelete(req.params.id);
+            const deleteUser = await userModel.findByIdAndDelete(req.user.id);
             if (!deleteUser) {
                 return res.status(404).json({ message: "User not found" });
             }
@@ -175,7 +188,7 @@ class userController {
     static updateProfilePicture = async (req, res) => {
         try {
             // check if user exists
-            const user = await userModel.findByIdAndUpdate(req.params.id);
+            const user = await userModel.findByIdAndUpdate(req.user.id);
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             };
