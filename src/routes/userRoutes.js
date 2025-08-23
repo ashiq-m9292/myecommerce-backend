@@ -5,13 +5,12 @@ import isAuth from '../middleWare/authMiddleware.js';
 import { upload } from '../middleWare/multer.js';
 
 
-
 userRouter.post('/createuser', userController.registerUser);
 userRouter.post('/loginuser', userController.loginUser);
 userRouter.post('/logoutuser', isAuth, userController.logoutUser);
-userRouter.get('/getalluser', isAuth, userController.getAllUsers);
+userRouter.get('/guetalluser', isAuth, userController.getAllUsers);
 userRouter.get('/getsingleuser/:id', isAuth, userController.getSingleUser);
-userRouter.delete('/deleteuser/:id', isAuth, userController.deleteUser);
+userRouter.delete('/deleteuser', isAuth, userController.deleteUser);
 userRouter.get('/getuserprofile', isAuth, userController.getUserProfile);
 userRouter.put('/updateuserprofile', isAuth, userController.updateUser);
 userRouter.put('/updateuserpassword', isAuth, userController.updatePassword);
