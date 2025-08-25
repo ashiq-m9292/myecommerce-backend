@@ -188,7 +188,7 @@ class userController {
     static updateProfilePicture = async (req, res) => {
         try {
             // check if user exists
-            const user = await userModel.findByIdAndUpdate(req.user.id);
+            const user = await userModel.findById(req.user.id);
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             };
@@ -196,12 +196,10 @@ class userController {
             if (!req.file) {
                 return res.status(400).json({ message: "Please select a profile picture" });
             }
-
             // already exist profilePicture
-            if (user.profilePicture.public_id) {
+            if (user.profilePicture?.public_id) {
                 await cloudinary.v2.uploader.destroy(user.profilePicture.public_id);
             }
-
             // upload image to cloudinary
             const fileBase64 = req.file.buffer.toString('base64');
             const dataURI = `data:${req.file.mimetype};base64,${fileBase64}`;

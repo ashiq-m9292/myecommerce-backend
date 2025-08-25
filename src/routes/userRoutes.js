@@ -4,16 +4,24 @@ import userController from '../controllers/userController.js';
 import isAuth from '../middleWare/authMiddleware.js';
 import { upload } from '../middleWare/multer.js';
 
-
+//  user create logout or login 
 userRouter.post('/createuser', userController.registerUser);
 userRouter.post('/loginuser', userController.loginUser);
 userRouter.post('/logoutuser', isAuth, userController.logoutUser);
+
+//  get user and users 
 userRouter.get('/guetalluser', isAuth, userController.getAllUsers);
 userRouter.get('/getsingleuser/:id', isAuth, userController.getSingleUser);
+
+// user delete 
 userRouter.delete('/deleteuser', isAuth, userController.deleteUser);
+
+// get profile 
 userRouter.get('/getuserprofile', isAuth, userController.getUserProfile);
+
+// user update password profile or picture 
 userRouter.put('/updateuserprofile', isAuth, userController.updateUser);
 userRouter.put('/updateuserpassword', isAuth, userController.updatePassword);
-userRouter.put('/updateuserprofilepicture', isAuth, upload.single("image"), userController.updateProfilePicture);
+userRouter.post('/updateuserprofilepicture', isAuth, upload.single("image"), userController.updateProfilePicture);
 
 export default userRouter;
