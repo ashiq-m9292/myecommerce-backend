@@ -66,7 +66,10 @@ class productControll {
     static getAllProducts = async (req, res) => {
         try {
             const products = await productModel.find();
-            res.status(200).json(products);
+            if(!products || products.length === 0) {
+                return res.status(404).json({ message: "No products found" });
+            };
+            res.status(200).json({message: "All products fetched successfully", products });
         } catch (error) {
             res.status(500).json({ message: "Error fetching products", error: error.message });
         }
