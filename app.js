@@ -19,7 +19,11 @@ connectDB(databaseConnection);
 
 // cookie setup 
 import cookieParser from 'cookie-parser';
-app.use(cookieParser());
+app.use(cookieParser({
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict'
+}));
 
 // bodyParser
 import bodyParser from 'body-parser';
@@ -27,7 +31,14 @@ app.use(bodyParser.json());
 
 // cors setup 
 import cors from 'cors';
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}));
+
+// morgan setup 
+import morgan from 'morgan';
+app.use(morgan('dev'));
 
 
 
@@ -49,5 +60,5 @@ app.use('/api/v1/order', orderRouter);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-    console.log(`http:localhost:${port}`)
+    console.log(`http://localhost:${port}`)
 });

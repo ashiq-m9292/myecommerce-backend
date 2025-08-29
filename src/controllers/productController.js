@@ -101,9 +101,7 @@ class productControll {
                 return res.status(404).json({ message: "Product not found" });
             };
 
-            // jitni image mai upload karu utni images delete karne ka
             if (req.files && req.files.length > 0) {
-                // Delete old images from Cloudinary
                 product.images.forEach(async (image) => {
                     await cloudinary.v2.uploader.destroy(image.public_id);
                 });

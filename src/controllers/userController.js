@@ -56,7 +56,7 @@ class userController {
                 secure: 'true',
                 sameSite: 'strict',
                 maxAge: 1 * 30 * 24 * 60 * 60 * 1000, // 1 month
-            }).status(200).json({ message: "User login successfully", _id: existingUser._id, name: existingUser.name, email: existingUser.email, token });
+            }).status(200).json({ message: "User login successfully", _id: existingUser._id, name: existingUser.name, email: existingUser.email, token, role: existingUser.role });
         } catch (error) {
             res.status(500).json({ message: "Error logging in user", error: error.message });
         }
