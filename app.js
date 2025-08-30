@@ -19,11 +19,7 @@ connectDB(databaseConnection);
 
 // cookie setup 
 import cookieParser from 'cookie-parser';
-app.use(cookieParser({
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict'
-}));
+app.use(cookieParser());
 
 // bodyParser
 import bodyParser from 'body-parser';
@@ -32,7 +28,7 @@ app.use(bodyParser.json());
 // cors setup 
 import cors from 'cors';
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://myecommerce-backend-nqc9.onrender.com',
     credentials: true,
 }));
 
