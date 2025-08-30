@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 // cors setup 
 import cors from 'cors';
 app.use(cors({
-    origin: 'https://myecommerce-backend-nqc9.onrender.com',
+    origin: 'http://localhost:5173/',
     credentials: true,
 }));
 
