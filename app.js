@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 
 // cors setup 
 const allowedOrigins = [
-    "https://ecommerce-admin-app-three.vercel.app",
+    "https://ecommerce-admin-app-gold.vercel.app",
     "http://localhost:5173"
 ]
 import cors from 'cors';
