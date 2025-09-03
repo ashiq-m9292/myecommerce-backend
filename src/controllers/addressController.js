@@ -9,6 +9,7 @@ class AddressController {
                 return res.status(400).json({ message: 'All fields are required' });
             };
             const newAddress = new address({
+                userId: req.user._id,
                 street,
                 village,
                 city,
@@ -25,7 +26,11 @@ class AddressController {
     // get all address 
     static getAllAddresses = async (req, res) => {
         try {
-            const addresses = await address.find();
+            const addresses = await address.find(
+                {
+                    userId: req.user._id
+                },
+            );
             if (!addresses || addresses.length === 0) {
                 return res.status(404).json({ message: 'No addresses found' });
             }
@@ -39,7 +44,13 @@ class AddressController {
 
     static deleteAddress = async (req, res) => {
         try {
-            const deletedAddress = await address.findByIdAndDelete(req.params.id);
+            const deletedAddress = await address.findOneAndDelete(
+                {
+                    userId: req.user._id,
+                    id: req.params._id
+                },
+                { new: true }
+            );
             if (!deletedAddress) {
                 return res.status(404).json({ message: 'Address not found' });
             }
@@ -53,16 +64,25 @@ class AddressController {
     static updateAddress = async (req, res) => {
         try {
             const { street, village, city, zipCode, phone } = req.body;
-            const updatedAddress = await address.findByIdAndUpdate(req.params.id)
+            const updatedAddress = await address.findOneAndUpdate(
+                {
+                    userId: req.user._id,
+                    id: req.params._id
+                },
+                {
+                    $set: {
+                        street,
+                        village,
+                        city,
+                        zipCode,
+                        phone
+                    }
+                },
+                { new: true }
+            )
             if (!updatedAddress) {
                 return res.status(404).json({ message: 'Address not found' });
             }
-            updatedAddress.street = street
-            updatedAddress.village = village;
-            updatedAddress.city = city;
-            updatedAddress.zipCode = zipCode;
-            updatedAddress.phone = phone;
-            await updatedAddress.save();
             res.status(200).json({ message: 'Address updated successfully', address: updatedAddress });
         } catch (error) {
             res.status(500).json({ message: 'Error updating address', error: error.message });

@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const addressSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     street: {
         type: String,
         required: true,
@@ -21,7 +26,7 @@ const addressSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-}, {timeseries: true});
+}, { timeseries: true });
 
 const address = mongoose.model("Address", addressSchema);
 
