@@ -7,7 +7,8 @@ import isAuth from '../middleWare/authMiddleware.js';
 
 orderRouter.post('/createorder', isAuth, orderController.createOrder);
 orderRouter.get('/getallorders', isAuth, orderController.getAllOrders);
-
+orderRouter.delete('/deleteorder/:id', isAuth, orderController.deleteOrder);
+orderRouter.put('/updateorder/:id', isAuth, orderController.updateOrder);
 
 
 

@@ -1,4 +1,5 @@
 import orderModal from "../models/orderModal.js";
+import addressModal from "../models/addressModal.js";
 import productModal from "../models/productModal.js";
 
 
@@ -7,29 +8,23 @@ class orderController {
     // create order 
     static createOrder = async (req, res) => {
         try {
-            const { userId, userAddress, userProduct, quantity, paymentStatus, orderStatus, createdAt } = req.body;
-            if (!userId || !userAddress || !userProduct || !quantity) {
+            const { addressId, products, totalPrice, paymentStatus, orderStatus } = req.body;
+            if (!addressId || !products || !totalPrice) {
                 return res.status(400).json({ message: "All fields are required" });
             };
-
-            const product = await productModal.findById(userProduct);
-            if (!product) {
-                return res.status(404).json({ message: "Product not found" });
-            };
-            const price = product.price;
-            const qty = quantity;
-            const totalPrice = price * qty;
             const newOrder = new orderModal({
-                userId,
-                userAddress,
-                userProduct,
-                quantity,
+                userId: req.user._id,
+                addressId,
+                products,
                 totalPrice,
                 paymentStatus,
                 orderStatus,
-                createdAt
+                createdAt: new Date()
             });
             await newOrder.save();
+            if (!newOrder) {
+                return res.status(404).json({ message: "Order not created" });
+            }
             res.status(201).json({ message: "Order created successfully", order: newOrder });
         } catch (error) {
             res.status(500).json({ message: "Error creating order", error: error.message });
@@ -39,7 +34,7 @@ class orderController {
     // get all orders
     static getAllOrders = async (req, res) => {
         try {
-            const orders = await orderModal.find().populate("userId", "name email").populate("userAddress").populate("userProduct", "name price images");
+            const orders = await orderModal.find({ userId: req.user._id }).populate("userId", "name email").populate("addressId").populate("products.productId");
             if (!orders || orders.length === 0) {
                 return res.status(404).json({ message: "No orders found" });
             }
@@ -47,7 +42,35 @@ class orderController {
         } catch (error) {
             res.status(500).json({ message: "Error fetching orders", error: error.message });
         }
-    }
+    };
+
+    // delete order 
+    static deleteOrder = async (req, res) => {
+        try {
+            const deleteOrder = await orderModal.findOneAndDelete({ userId: req.user._id, _id: req.params.id }, { new: true });
+            if (!deleteOrder || deleteOrder.length === 0) {
+                return res.status(404).json({ message: "Order not found" });
+            }
+            res.status(200).json({ message: "Order deleted successfully" });
+        } catch (error) {
+            res.status(500).json({ message: "Error deleting order", error: error.message });
+        }
+    };
+
+
+    // update order 
+    static updateOrder = async (req, res) => {
+        try {
+            const {orderStatus } = req.body;
+            const updateOrder = await orderModal.findOneAndUpdate({ userId: req.user._id, _id: req.params.id }, {$set: {orderStatus}}, { new: true } );
+            if (!updateOrder || updateOrder.length === 0) {
+                return res.status(404).json({ message: "Order not found" });
+            }
+            res.status(200).json({ message: "Order updated successfully", order: updateOrder });
+        } catch (error) {
+            res.status(500).json({ message: "Error updating order", error: error.message });
+        }
+    };
 
 }
 
