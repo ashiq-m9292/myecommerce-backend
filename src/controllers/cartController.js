@@ -51,6 +51,23 @@ class cartController {
         }
     }
 
+    // update quantity 
+    static updateQuantity = async (req, res) => {
+        try {
+            const { quantity } = req.body;
+            const updatedCartItem = await cartModal.findOneAndUpdate(
+                { userId: req.user._id, _id: req.params.id },
+                { quantity },
+                { new: true }
+            );
+            if (!updatedCartItem || updatedCartItem.length === 0) {
+                return res.status(404).json({ message: "Cart item not found" });
+            };
+            res.status(200).json({ message: "Cart item quantity updated successfully", updatedCartItem });
+        } catch (error) {
+            res.status(500).json({ message: "Error updating cart item quantity", error });
+        }
+    }
 
 }
 

@@ -7,7 +7,7 @@ class productControll {
     // create product 
     static createProduct = async (req, res) => {
         try {
-            const { name, price, description, category, stock, quantity } = req.body;
+            const { name, price, description, category, stock } = req.body;
             if (!name || !price || !description || !category || !stock) {
                 return res.status(400).json({ message: "All fields are required" });
             };
@@ -40,7 +40,6 @@ class productControll {
                 description,
                 category,
                 stock,
-                quantity,
                 images
             });
             await product.save();
