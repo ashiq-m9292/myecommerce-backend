@@ -93,18 +93,10 @@ class AddressController {
     // defaultAddress 
     static defaultAddress = async (req, res) => {
         try {
-            const existingAddress = await address.findOne(
-                {
-                    userId: req.user._id,
-                    isDefault: true
-                }
+            const existingAddress = await address.findOne({ userId: req.user._id, isDefault: true }
             )
             if (!existingAddress) {
-                const firstAddress = await address.findOne(
-                    {
-                        userId: req.user._id
-                    }
-                ).sort({ createdAt: 1 });
+                const firstAddress = await address.findOne({ userId: req.user._id }).sort({ createdAt: 1 });
                 if (firstAddress) {
                     firstAddress.isDefault = true;
                     await firstAddress.save();
@@ -112,28 +104,8 @@ class AddressController {
                     return
                 }
             };
-            await address.updateMany(
-                {
-                    userId: req.user._id
-                },
-                {
-                    $set: {
-                        isDefault: false
-                    }
-                }
-            );
-            const updatedAddress = await address.findOneAndUpdate(
-                {
-                    userId: req.user._id,
-                    id: req.params._id
-                },
-                {
-                    $set: {
-                        isDefault: true
-                    }
-                },
-                { new: true }
-            )
+            await address.updateMany({ userId: req.user._id }, { $set: { isDefault: false } });
+            const updatedAddress = await address.findOneAndUpdate({ userId: req.user._id, id: req.params._id }, { $set: { isDefault: true }, }, { new: true });
             res.status(200).json({ message: 'Address updated successfully', updatedAddress });
         } catch (error) {
             res.status(500).json({ message: 'Error updating address', error: error.message });

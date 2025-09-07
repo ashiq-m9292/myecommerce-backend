@@ -7,7 +7,7 @@ class productControll {
     // create product 
     static createProduct = async (req, res) => {
         try {
-            const { name, price, description, category, stock } = req.body;
+            const { name, price, description, category, stock, quantity } = req.body;
             if (!name || !price || !description || !category || !stock) {
                 return res.status(400).json({ message: "All fields are required" });
             };
@@ -40,6 +40,7 @@ class productControll {
                 description,
                 category,
                 stock,
+                quantity,
                 images
             });
             await product.save();
@@ -66,10 +67,10 @@ class productControll {
     static getAllProducts = async (req, res) => {
         try {
             const products = await productModel.find();
-            if(!products || products.length === 0) {
+            if (!products || products.length === 0) {
                 return res.status(404).json({ message: "No products found" });
             };
-            res.status(200).json({message: "All products fetched successfully", products });
+            res.status(200).json({ message: "All products fetched successfully", products });
         } catch (error) {
             res.status(500).json({ message: "Error fetching products", error: error.message });
         }

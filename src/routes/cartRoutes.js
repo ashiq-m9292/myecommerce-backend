@@ -8,6 +8,4 @@ carRouter.post('/addtocart', isAuth, cartController.createCart);
 carRouter.get('/getallcart', isAuth, cartController.getAllCart);
 carRouter.delete('/deletecart/:id', isAuth, cartController.deleteCart);
 
-
-
 export default carRouter;
