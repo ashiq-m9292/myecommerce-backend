@@ -10,5 +10,9 @@ productRouter.get('/getsingleproduct/:id', isAuth, productControll.getSingleProd
 productRouter.get('/getallproducts', productControll.getAllProducts);
 productRouter.delete('/deleteproduct/:id', isAuth, productControll.deleteProduct);
 productRouter.put('/updateproduct/:id', isAuth, upload.array("images"), productControll.updateProduct);
+productRouter.get('/topproducts', productControll.topProducts);
+productRouter.get('/vageproducts', productControll.vageProducts);
+productRouter.get('/nonvageproducts', productControll.nonVageProducts);
+productRouter.get('/searchproducts', productControll.searchProducts);
 
 export default productRouter;

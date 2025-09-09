@@ -1,5 +1,4 @@
 import orderModal from "../models/orderModal.js";
-import addressModal from "../models/addressModal.js";
 import productModal from "../models/productModal.js";
 
 
@@ -12,6 +11,16 @@ class orderController {
             if (!addressId || !products || !totalPrice) {
                 return res.status(400).json({ message: "All fields are required" });
             };
+            for (let item of products) {
+                const product = await productModal.findById(item.productId);
+                if (!product) {
+                    return res.status(404).json({ message: "Product not found" });
+                }
+                if (product.stock < item.quantity) {
+                    return res.status(400).json({ message: "Product out of stock" });
+                }
+            };
+
             const newOrder = new orderModal({
                 userId: req.user._id,
                 addressId,
@@ -24,6 +33,16 @@ class orderController {
             await newOrder.save();
             if (!newOrder) {
                 return res.status(404).json({ message: "Order not created" });
+            }
+            // update product stock and sold 
+            for (let item of products) {
+                const product = await productModal.findById(item.productId);
+                if (!product) {
+                    return res.status(404).json({ message: "Product not found stock and sold" });
+                }
+                product.stock -= item.quantity;
+                product.sold += item.quantity;
+                await product.save();
             }
             res.status(201).json({ message: "Order created successfully", order: newOrder });
         } catch (error) {
@@ -57,12 +76,11 @@ class orderController {
         }
     };
 
-
     // update order 
     static updateOrder = async (req, res) => {
         try {
-            const {orderStatus } = req.body;
-            const updateOrder = await orderModal.findOneAndUpdate({ userId: req.user._id, _id: req.params.id }, {$set: {orderStatus}}, { new: true } );
+            const { orderStatus } = req.body;
+            const updateOrder = await orderModal.findOneAndUpdate({ userId: req.user._id, _id: req.params.id }, { $set: { orderStatus } }, { new: true });
             if (!updateOrder || updateOrder.length === 0) {
                 return res.status(404).json({ message: "Order not found" });
             }

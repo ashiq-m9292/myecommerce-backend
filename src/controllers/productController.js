@@ -144,6 +144,69 @@ class productControll {
             res.status(500).json({ message: "Error updating product", error: error.message });
         }
     };
+
+
+    // top 3 products 
+    static topProducts = async (req, res) => {
+        try {
+            const topProducts = await productModel.find().sort({ sold: -1 }).limit(3);
+            if (!topProducts || topProducts.length === 0) {
+                return res.status(404).json({ message: "No top products found" });
+            }
+            res.status(200).json({ message: "Top products fetched successfully", topProducts });
+        } catch (error) {
+            res.status(500).json({ message: "Error fetching top products", error: error.message });
+        }
+    };
+
+    // vage products
+    static vageProducts = async (req, res) => {
+        try {
+            const categoryProducts = await productModel.find({ category: "vage" });
+            if (!categoryProducts || categoryProducts.length === 0) {
+                return res.status(404).json({ message: "No category products found" });
+            }
+            res.status(200).json({ message: "Category products fetched successfully", categoryProducts });
+        } catch (error) {
+            res.status(500).json({ message: "Error fetching category products", error: error.message });
+        }
+    };
+
+    // non vage products 
+    static nonVageProducts = async (req, res) => {
+        try {
+            const categoryProducts = await productModel.find({ category: "nonvage" });
+            if (!categoryProducts || categoryProducts.length === 0) {
+                return res.status(404).json({ message: "No category products found" });
+            }
+            res.status(200).json({ message: "Category products fetched successfully", categoryProducts });
+        } catch (error) {
+            res.status(500).json({ message: "Error fetching category products", error: error.message });
+        }
+    };
+
+    // search api 
+    static searchProducts = async (req, res) => {
+        try {
+            const search = req.query.q;
+            const regex = new RegExp(search, "i");
+            const products = await productModel.find({
+                $or: [
+                    { name: regex },
+                    { description: regex },
+                    { category: regex }
+                ]
+            })
+            if (!products || products.length === 0) {
+                return res.status(404).json({ message: "No search results found" });
+            }
+            res.status(200).json({ message: "Search results fetched successfully", products });
+        } catch (error) {
+            res.status(500).json({ message: "Error fetching search results", error: error.message });
+        }
+    };
+
 };
+
 
 export default productControll;

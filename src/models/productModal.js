@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema({
     readableDate: {
         type: String,
         default: new Date().toLocaleString()
+    },
+    sold: {
+        type: Number,
+        default: 0
     }
 }, { timeseries: true });
 

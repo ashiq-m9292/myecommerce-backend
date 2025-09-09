@@ -10,7 +10,7 @@ userRouter.post('/loginuser', userController.loginUser);
 userRouter.post('/logoutuser', isAuth, userController.logoutUser);
 
 //  get user and users 
-userRouter.get('/guetalluser', isAuth, userController.getAllUsers);
+userRouter.get('/getalluser', isAuth, userController.getAllUsers);
 userRouter.get('/getsingleuser/:id', isAuth, userController.getSingleUser);
 
 // user delete 
