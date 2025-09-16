@@ -193,7 +193,6 @@ class productControll {
             const products = await productModel.find({
                 $or: [
                     { name: regex },
-                    { description: regex },
                     { category: regex }
                 ]
             })

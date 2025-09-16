@@ -25,10 +25,17 @@ class cartController {
     static getAllCart = async (req, res) => {
         try {
             const cartItems = await cartModal.find({ userId: req.user._id }).populate("productId");
-            if (cartItems.length === 0 || !cartItems) {
+            // valid cart items
+            const validCardItems = cartItems.filter((item) => item.productId !== null);
+            // invalid cart items and filter
+            const invalidCardItems = cartItems.filter((item) => item.productId === null);
+            if (invalidCardItems.length >= 0) {
+                await cartModal.deleteMany({ _id: { $in: invalidCardItems.map((item) => item._id) } });
+            }
+            if (validCardItems.length === 0 || !validCardItems) {
                 return res.status(404).json({ message: "No cart items found" });
             }
-            res.status(200).json({ message: "Get all cart items successfully", cartItems });
+            res.status(200).json({ message: "Get all cart items successfully", validCardItems });
         } catch (error) {
             res.status(500).json({ message: "Error getting cart items", error });
         }

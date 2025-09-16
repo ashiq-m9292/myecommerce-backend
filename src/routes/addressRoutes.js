@@ -8,7 +8,7 @@ addressRouter.post("/createaddress", isAuth, AddressController.createAddress);
 addressRouter.get("/getalladdress", isAuth, AddressController.getAllAddresses);
 addressRouter.delete("/deleteAddress/:id", isAuth, AddressController.deleteAddress);
 addressRouter.put("/updateAddress/:id", isAuth, AddressController.updateAddress);
-addressRouter.put("/defaultaddress/:id", isAuth, AddressController.defaultAddress);
+addressRouter.put("/isdefault/:id", isAuth, AddressController.defaultAddress);
 
 
 export default addressRouter;

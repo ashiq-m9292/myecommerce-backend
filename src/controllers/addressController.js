@@ -8,6 +8,7 @@ class AddressController {
             if (!street || !village || !city || !zipCode || !phone) {
                 return res.status(400).json({ message: 'All fields are required' });
             };
+            const addressCount = await address.countDocuments({ userId: req.user._id });
             const newAddress = new address({
                 userId: req.user._id,
                 street,
@@ -15,7 +16,7 @@ class AddressController {
                 city,
                 zipCode,
                 phone,
-                isDefault
+                isDefault: addressCount === 0 ? true : false
             });
             await newAddress.save();
             res.status(201).json({ message: 'Address created successfully', address: newAddress });
@@ -48,7 +49,7 @@ class AddressController {
             const deletedAddress = await address.findOneAndDelete(
                 {
                     userId: req.user._id,
-                    id: req.params._id
+                    _id: req.params.id
                 },
                 { new: true }
             );
@@ -68,7 +69,7 @@ class AddressController {
             const updatedAddress = await address.findOneAndUpdate(
                 {
                     userId: req.user._id,
-                    id: req.params._id
+                    _id: req.params.id
                 },
                 {
                     $set: {
@@ -84,7 +85,7 @@ class AddressController {
             if (!updatedAddress) {
                 return res.status(404).json({ message: 'Address not found' });
             }
-            res.status(200).json({ message: 'Address updated successfully', address: updatedAddress });
+            res.status(200).json({ message: 'Address updated successfully', updatedAddress });
         } catch (error) {
             res.status(500).json({ message: 'Error updating address', error: error.message });
         }
@@ -93,20 +94,34 @@ class AddressController {
     // defaultAddress 
     static defaultAddress = async (req, res) => {
         try {
-            const existingAddress = await address.findOne({ userId: req.user._id, isDefault: true }
-            )
-            if (!existingAddress) {
-                const firstAddress = await address.findOne({ userId: req.user._id }).sort({ createdAt: 1 });
-                if (firstAddress) {
-                    firstAddress.isDefault = true;
-                    await firstAddress.save();
-                    res.status(200).json({ message: 'Address updated successfully', updatedAddress: firstAddress });
-                    return
+            //    all addresses isDefault false 
+            await address.updateMany(
+                {
+                    userId: req.user._id
+                },
+                {
+                    $set: {
+                        isDefault: false
+                    }
                 }
-            };
-            await address.updateMany({ userId: req.user._id }, { $set: { isDefault: false } });
-            const updatedAddress = await address.findOneAndUpdate({ userId: req.user._id, id: req.params._id }, { $set: { isDefault: true }, }, { new: true });
-            res.status(200).json({ message: 'Address updated successfully', updatedAddress });
+            );
+            // update isDefault true
+            const updateDefaultAddress = await address.findOneAndUpdate(
+                {
+                    userId: req.user._id,
+                    _id: req.params.id
+                },
+                {
+                    $set: {
+                        isDefault: true
+                    }
+                },
+                { new: true }
+            )
+            if (!updateDefaultAddress) {
+                return res.status(404).json({ message: 'Address not found' });
+            }
+            res.status(200).json({ message: 'Address updated successfully', address: updateDefaultAddress });
         } catch (error) {
             res.status(500).json({ message: 'Error updating address', error: error.message });
         }
