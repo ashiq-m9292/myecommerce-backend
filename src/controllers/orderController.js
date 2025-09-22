@@ -7,8 +7,8 @@ class orderController {
     // create order 
     static createOrder = async (req, res) => {
         try {
-            const { addressId, products, totalPrice, paymentStatus, orderStatus } = req.body;
-            if (!addressId || !products || !totalPrice) {
+            const { shippingAddress, products, totalPrice, paymentStatus, orderStatus } = req.body;
+            if (!shippingAddress || !products || !totalPrice) {
                 return res.status(400).json({ message: "All fields are required" });
             };
             for (let item of products) {
@@ -23,7 +23,7 @@ class orderController {
 
             const newOrder = new orderModal({
                 userId: req.user._id,
-                addressId,
+                shippingAddress,
                 products,
                 totalPrice,
                 paymentStatus,
@@ -53,7 +53,7 @@ class orderController {
     // get all orders
     static getAllOrders = async (req, res) => {
         try {
-            const orders = await orderModal.find({ userId: req.user._id }).populate("userId", "name email").populate("addressId").populate("products.productId");
+            const orders = await orderModal.find({ userId: req.user._id }).populate("userId", "name email").populate("shippingAddress", "street village city zipCode phone").populate("products", "name price quantity image");
             if (!orders || orders.length === 0) {
                 return res.status(404).json({ message: "No orders found" });
             }

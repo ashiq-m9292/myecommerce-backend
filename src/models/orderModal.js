@@ -6,10 +6,12 @@ const orderSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    addressId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Address",
-        required: true
+    shippingAddress: {
+        street: String,
+        village: String,
+        city: String,
+        zipCode: String,
+        phone: String
     },
     products: [
         {
@@ -18,11 +20,10 @@ const orderSchema = new mongoose.Schema({
                 ref: "Product",
                 required: true
             },
-            quantity: {
-                type: Number,
-                required: true,
-                default: 1
-            }
+            name: String,
+            price: Number,
+            quantity: Number,
+            image: String
         }
     ],
     totalPrice: {
