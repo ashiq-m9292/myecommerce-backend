@@ -1,5 +1,6 @@
 import orderModal from "../models/orderModal.js";
 import productModal from "../models/productModal.js";
+import cartModal from "../models/cartModal.js";
 
 
 
@@ -34,6 +35,12 @@ class orderController {
             if (!newOrder) {
                 return res.status(404).json({ message: "Order not created" });
             }
+
+            // remove cart items after order creation
+            for (let item of products) {
+                await cartModal.findOneAndDelete({ userId: req.user._id, productId: item.productId });
+            }
+
             // update product stock and sold 
             for (let item of products) {
                 const product = await productModal.findById(item.productId);
