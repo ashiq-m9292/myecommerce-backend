@@ -12,6 +12,7 @@ import productRouter from './src/routes/productRoutes.js';
 import addressRouter from './src/routes/addressRoutes.js';
 import orderRouter from './src/routes/orderRoutes.js';
 import cartRouter from './src/routes/cartRoutes.js';
+import wishListRouter from './src/routes/wishListRoutes.js';
 
 // database connection 
 import connectDB from './src/db/connectdb.js';
@@ -58,6 +59,7 @@ app.use('/api/v1/product', productRouter);
 app.use('/api/v1/address', addressRouter);
 app.use('/api/v1/order', orderRouter);
 app.use('/api/v1/cart', cartRouter);
+app.use('/api/v1/wishList', wishListRouter);
 
 
 const port = process.env.PORT || 8080;
