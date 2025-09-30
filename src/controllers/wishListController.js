@@ -23,11 +23,14 @@ class wishController {
     // delete wish list 
     static deleteWishList = async (req, res) => {
         try {
-            const deleteWishLishItems = wishList.findOneAndDelete({ userId: req.user._id, _id: req.params.id }, { new: true });
-            if (!deleteWishLishItems || deleteWishLishItems.length === 0) {
-                return res.status(404).json({ message: "Cart item not found" });
+            const deleteWishListItem = await wishList.findOneAndDelete({
+                userId: req.user._id,
+                _id: req.params.id
+            }, { new: true });
+            if (!deleteWishListItem) {
+                return res.status(404).json({ message: "wish list item not found" })
             };
-            res.status(200).json({ message: "Wish List item deleted successfully" })
+            res.status(200).json({ message: "wish list item deleted successfully", deleteWishListItem })
         } catch (error) {
             console.log("error in delete wish list", error)
         }

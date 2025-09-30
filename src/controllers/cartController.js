@@ -43,7 +43,6 @@ class cartController {
         }
     }
 
-
     // delete cart item 
     static deleteCart = async (req, res) => {
         try {
@@ -51,7 +50,7 @@ class cartController {
                 { userId: req.user._id, _id: req.params.id },
                 { new: true }
             );
-            if (!deletedCartItem || deletedCartItem.length === 0) {
+            if (!deletedCartItem) {
                 return res.status(404).json({ message: "Cart item not found" });
             };
             res.status(200).json({ message: "Cart item deleted successfully" });
