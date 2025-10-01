@@ -1,6 +1,6 @@
 import express from "express";
 const reviewRouter = express.Router();
-import reviewController from "../controllers/ReviewController.js";
+import reviewController from "../controllers/reviewController.js";
 import { isAuth, isAdmin } from '../middleWare/authMiddleware.js';
 
 reviewRouter.post('/createreview', isAuth, reviewController.createReview);
