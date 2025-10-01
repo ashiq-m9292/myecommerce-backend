@@ -1,7 +1,7 @@
 import express from "express";
 import AddressController from "../controllers/addressController.js";
 const addressRouter = express.Router();
-import isAuth from '../middleWare/authMiddleware.js';
+import { isAuth } from '../middleWare/authMiddleware.js';
 
 
 addressRouter.post("/createaddress", isAuth, AddressController.createAddress);

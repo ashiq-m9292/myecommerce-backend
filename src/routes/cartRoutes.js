@@ -1,7 +1,7 @@
 import express from "express"
 const carRouter = express.Router();
 import cartController from "../controllers/cartController.js";
-import isAuth from "../middleWare/authMiddleware.js";
+import { isAuth } from "../middleWare/authMiddleware.js";
 
 
 carRouter.post('/addtocart', isAuth, cartController.createCart);

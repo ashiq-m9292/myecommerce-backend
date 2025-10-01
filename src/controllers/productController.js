@@ -52,7 +52,7 @@ class productControll {
     // get single product
     static getSingleProduct = async (req, res) => {
         try {
-            const product = await productModel.findById(req.params.id);
+            const product = await productModel.findOne({ _id: req.params.id });
             if (!product) {
                 return res.status(404).json({ message: "Product not found" });
             }
@@ -79,7 +79,7 @@ class productControll {
     // delete product
     static deleteProduct = async (req, res) => {
         try {
-            const product = await productModel.findByIdAndDelete(req.params.id);
+            const product = await productModel.findOneAndDelete({ _id: req.params.id });
             if (!product) {
                 return res.status(404).json({ message: "Product not found" });
             }
@@ -96,7 +96,7 @@ class productControll {
     static updateProduct = async (req, res) => {
         try {
             const { name, price, description, category, stock } = req.body;
-            const product = await productModel.findByIdAndUpdate(req.params.id);
+            const product = await productModel.findOneAndUpdate({ _id: req.params.id }, { $set: { name, price, description, category, stock } }, { new: true });
             if (!product) {
                 return res.status(404).json({ message: "Product not found" });
             };
@@ -131,11 +131,6 @@ class productControll {
                 }));
             }
 
-            product.name = name;
-            product.price = price;
-            product.description = description;
-            product.category = category;
-            product.stock = stock;
             product.images = images;
 
             await product.save();

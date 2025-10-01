@@ -96,7 +96,7 @@ class userController {
     // getSingleUser 
     static getSingleUser = async (req, res) => {
         try {
-            const getSingle = await userModel.findById(req.params.id);
+            const getSingle = await userModel.findOne({ _id: req.params.id }).select("-password")
 
             // check if any users found
             if (!getSingle) {
@@ -111,7 +111,7 @@ class userController {
     // get user profile
     static getUserProfile = async (req, res) => {
         try {
-            const user = await userModel.findById(req.user.id).select("-password");
+            const user = await userModel.findOne({_id: req.user.id}).select("-password");
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
@@ -142,7 +142,7 @@ class userController {
     // deleteUser function
     static deleteUser = async (req, res) => {
         try {
-            const deleteUser = await userModel.findByIdAndDelete(req.user.id);
+            const deleteUser = await userModel.findOneAndDelete({ _id: req.user.id });
             if (!deleteUser) {
                 return res.status(404).json({ message: "User not found" });
             }
@@ -163,7 +163,7 @@ class userController {
                     massage: "please fill all field"
                 })
             }
-            const user = await userModel.findByIdAndUpdate(req.user.id);
+            const user = await userModel.findOneAndUpdate({ _id: req.user.id })
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             };
@@ -188,7 +188,7 @@ class userController {
     static updateProfilePicture = async (req, res) => {
         try {
             // check if user exists
-            const user = await userModel.findById(req.user.id);
+            const user = await userModel.findOne({ _id: req.user.id });
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             };

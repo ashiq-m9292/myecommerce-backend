@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const wishListSchema = new mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -11,13 +11,20 @@ const wishListSchema = new mongoose.Schema({
         ref: "Product",
         required: true
     },
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    comment: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now
     }
-}, { timestamps: true })
+}, { timestamps: true });
 
-
-const wishList = mongoose.model('WishList', wishListSchema);
-
-export default wishList;
+const reviewModal = mongoose.model('Review', reviewSchema);
+export default reviewModal;

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModal.js";
 
-const isAuth = async (req, res, next) => {
+export const isAuth = async (req, res, next) => {
     const { token } = req.cookies;
     if (!token) {
         return res.status(401).json({ message: "Token N/A" });
@@ -15,4 +15,13 @@ const isAuth = async (req, res, next) => {
     }
 };
 
-export default isAuth;
+//    only admin permission isAuth middleware
+export const isAdmin = async (req, res, next) => {
+    if(!req.user){
+        return res.status(401).json({ message: "User N/A" });
+    }
+    if(req.user.role !== "admin"){
+        return res.status(401).json({ message: "You are not an admin" });
+    };
+    next();
+};

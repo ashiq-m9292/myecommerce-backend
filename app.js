@@ -13,6 +13,7 @@ import addressRouter from './src/routes/addressRoutes.js';
 import orderRouter from './src/routes/orderRoutes.js';
 import cartRouter from './src/routes/cartRoutes.js';
 import wishListRouter from './src/routes/wishListRoutes.js';
+import reviewRouter from './src/routes/ReviewRoutes.js';
 
 // database connection 
 import connectDB from './src/db/connectdb.js';
@@ -60,7 +61,7 @@ app.use('/api/v1/address', addressRouter);
 app.use('/api/v1/order', orderRouter);
 app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/wishList', wishListRouter);
-
+app.use('/api/v1/review', reviewRouter);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
