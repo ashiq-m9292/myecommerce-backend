@@ -62,6 +62,11 @@ app.use('/api/v1/order', orderRouter);
 app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/wishList', wishListRouter);
 app.use('/api/v1/review', reviewRouter);
+app.use('/', (req, res) => {
+    res.status(200).json({
+        message: "Welcome to Ecommerce Backend"
+    })
+});
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

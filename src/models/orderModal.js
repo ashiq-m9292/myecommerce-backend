@@ -40,6 +40,10 @@ const orderSchema = new mongoose.Schema({
         enum: ['shipped', 'delivered', 'cancelled'],
         default: 'shipped'
     },
+    isRated: {
+        type: Boolean,
+        default: false
+    },
     createdAt: {
         type: Date,
         default: Date.now
