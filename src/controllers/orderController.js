@@ -101,11 +101,11 @@ class orderController {
     // update isRated 
     static updateIsRated = async (req, res) => {
         try {
-            const { isRated } = req.body;
-            const updateOrder = await orderModal.findOneAndUpdate({ userId: req.user._id, _id: req.params.id }, { $set: { isRated } }, { new: true });
+            // const { isRated } = req.body;
+            const updateOrder = await orderModal.findOneAndUpdate({ userId: req.user._id, _id: req.params.id }, { isRated: true }, { new: true });
             if (!updateOrder || updateOrder.length === 0) {
                 return res.status(404).json({ message: "Order not found" });
-            }
+            };
             res.status(200).json({ message: "Order updated successfully", order: updateOrder });
         } catch (error) {
             res.status(500).json({ message: "Error updating order", error: error.message });
