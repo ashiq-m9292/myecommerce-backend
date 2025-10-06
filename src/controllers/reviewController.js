@@ -1,6 +1,7 @@
 import reviewModal from "../models/reviewModal.js";
 
 class reviewController {
+    // create review function
     static createReview = async (req, res) => {
         try {
             const { productId, rating, comment } = req.body;
@@ -48,6 +49,45 @@ class reviewController {
             res.status(500).json({ message: "Error getting all reviews", error });
         }
     };
+
+    // update review function 
+    static updateReview = async (req, res) => {
+        try {
+            const updateReview = await reviewModal.findOneAndUpdate({ userId: req.user._id, _id: req.params.id }, { $set: req.body }, { new: true });
+            if (!updateReview) {
+                return res.status(404).json({ message: "Review id not found" })
+            };
+            res.status(200).json({ message: "Review updated successfully", updateReview })
+        } catch (error) {
+            res.status(500).json({ message: "Error updating review", error });
+        }
+    }
+
+    // get single product review 
+    static getSingleProductReview = async (req, res) => {
+        try {
+            const reviews = await reviewModal.find({ productId: req.params.id }).populate("userId", "name email");
+            if (!reviews) {
+                return res.status(404).json({ message: "product id not found" })
+            };
+            res.status(200).json({ message: "All reviews", reviews });
+        } catch (error) {
+            res.status(500).json({ message: "Error getting all reviews", error });
+        }
+    };
+
+    // get user review with product id
+    static getUserReview = async (req, res) => {
+        try {
+            const reviews = await reviewModal.findOne({ userId: req.user._id, productId: req.params.id })
+            if (!reviews) {
+                return res.status(404).json({ message: "user id not found" })
+            };
+            res.status(200).json({ message: "All reviews", reviews });
+        } catch (error) {
+            res.status(500).json({ message: "Error getting all reviews", error });
+        }
+    }
 
 
 }

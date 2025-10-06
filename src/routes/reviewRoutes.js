@@ -6,6 +6,9 @@ import { isAuth, isAdmin } from '../middleWare/authMiddleware.js';
 reviewRouter.post('/createreview', isAuth, reviewController.createReview);
 reviewRouter.delete('/deletereview/:id', isAuth, isAdmin, reviewController.deleteReview);
 reviewRouter.get('/getallreviews', isAuth, reviewController.getAllReview);
+reviewRouter.get('/getsingleproductreviews/:id', isAuth, reviewController.getSingleProductReview);
+reviewRouter.put('/updatereview/:id', isAuth, reviewController.updateReview);
+reviewRouter.get('/getuserreviews/:id', isAuth, reviewController.getUserReview);
 
 
 
