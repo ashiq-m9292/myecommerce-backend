@@ -66,7 +66,7 @@ class reviewController {
     // get single product review 
     static getSingleProductReview = async (req, res) => {
         try {
-            const reviews = await reviewModal.find({ productId: req.params.id }).populate("userId", "name email");
+            const reviews = await reviewModal.find({ productId: req.params.id });
             if (!reviews) {
                 return res.status(404).json({ message: "product id not found" })
             };

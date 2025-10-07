@@ -7,7 +7,7 @@ class productControll {
     // create product 
     static createProduct = async (req, res) => {
         try {
-            const { name, price, description, category, stock } = req.body;
+            const { name, price, description, category, stock, sizes } = req.body;
             if (!name || !price || !description || !category || !stock) {
                 return res.status(400).json({ message: "All fields are required" });
             };
@@ -40,6 +40,7 @@ class productControll {
                 description,
                 category,
                 stock,
+                sizes,
                 images
             });
             await product.save();
@@ -95,8 +96,8 @@ class productControll {
     // product update 
     static updateProduct = async (req, res) => {
         try {
-            const { name, price, description, category, stock } = req.body;
-            const product = await productModel.findOneAndUpdate({ _id: req.params.id }, { $set: { name, price, description, category, stock } }, { new: true });
+            const { name, price, description, category, stock, sizes } = req.body;
+            const product = await productModel.findOneAndUpdate({ _id: req.params.id }, { $set: { name, price, description, category, stock, sizes } }, { new: true });
             if (!product) {
                 return res.status(404).json({ message: "Product not found" });
             };

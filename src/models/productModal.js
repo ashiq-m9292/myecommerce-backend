@@ -21,6 +21,13 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    sizes: [
+        {
+            size: String,
+            price: Number,
+            stock: Number
+        }
+    ],
     images: [
         {
             public_id: String,

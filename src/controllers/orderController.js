@@ -61,7 +61,7 @@ class orderController {
     // get all orders
     static getAllOrders = async (req, res) => {
         try {
-            const orders = await orderModal.find({ userId: req.user._id }).populate("userId", "name email").populate("shippingAddress", "street village city zipCode phone").populate("products", "name price quantity image");
+            const orders = await orderModal.find({ userId: req.user._id }).populate("userId", "name email").populate("shippingAddress", "street village city zipCode phone").populate("products", "name size price quantity image");
             if (!orders || orders.length === 0) {
                 return res.status(404).json({ message: "No orders found" });
             }

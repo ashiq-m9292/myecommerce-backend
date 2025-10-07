@@ -4,13 +4,15 @@ class cartController {
     // create cart item
     static createCart = async (req, res) => {
         try {
-            const { productId } = req.body;
-            if (!productId) {
+            const { productId, size, price } = req.body;
+            if (!productId || !size || !price) {
                 return res.status(400).json({ message: "All fields are required" });
             };
             const cartItem = new cartModal({
                 userId: req.user._id,
                 productId,
+                size,
+                price,
                 createdAt: new Date()
             });
             await cartItem.save();
