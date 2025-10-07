@@ -4,12 +4,13 @@ class reviewController {
     // create review function
     static createReview = async (req, res) => {
         try {
-            const { productId, rating, comment } = req.body;
-            if (!productId) {
+            const { orderId, productId, rating, comment } = req.body;
+            if (!orderId || !productId) {
                 return res.status(400).json({ message: "productId is required" });
             }
             const newReview = new reviewModal({
                 userId: req.user._id,
+                orderId,
                 productId,
                 rating,
                 comment,
@@ -40,7 +41,7 @@ class reviewController {
     // get review function 
     static getAllReview = async (req, res) => {
         try {
-            const reviews = await reviewModal.find({}).populate("userId", "name email");
+            const reviews = await reviewModal.find({}).populate("orderId").populate("productId").populate("userId", "name email");
             if (!reviews) {
                 return res.status(404).json({ message: "No reviews found" })
             };
@@ -66,11 +67,11 @@ class reviewController {
     // get single product review 
     static getSingleProductReview = async (req, res) => {
         try {
-            const reviews = await reviewModal.find({ productId: req.params.id });
+            const reviews = await reviewModal.find({ productId: req.params.id }).populate("userId", "name email");
             if (!reviews) {
                 return res.status(404).json({ message: "product id not found" })
             };
-            res.status(200).json({ message: "All reviews", reviews });
+            res.status(200).json({ message: "All product reviews", reviews });
         } catch (error) {
             res.status(500).json({ message: "Error getting all reviews", error });
         }

@@ -6,6 +6,11 @@ const reviewSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
+    orderId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+        required: true
+    },
     productId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
@@ -18,7 +23,6 @@ const reviewSchema = new mongoose.Schema({
     },
     comment: {
         type: String,
-        required: true
     },
     createdAt: {
         type: Date,
