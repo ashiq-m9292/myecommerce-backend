@@ -10,6 +10,7 @@ orderRouter.get('/getallorders', isAuth, orderController.getAllOrders);
 orderRouter.delete('/deleteorder/:id', isAuth, isAdmin, orderController.deleteOrder);
 orderRouter.put('/updateorder/:id', isAuth, isAdmin, orderController.updateOrder);
 orderRouter.put('/updateisrated/:id', isAuth, orderController.updateIsRated);
+orderRouter.get('/admingetallorders', isAuth, isAdmin,orderController.admingetAllorders);
 
 
 

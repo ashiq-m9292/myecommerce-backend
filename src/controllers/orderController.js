@@ -65,7 +65,7 @@ class orderController {
             if (!orders || orders.length === 0) {
                 return res.status(404).json({ message: "No orders found" });
             }
-            res.status(200).json({ massage: "Orders fetched successfully", orders });
+            res.status(200).json({ massage: "Orders fetched successfully",count:orders.length, orders });
         } catch (error) {
             res.status(500).json({ message: "Error fetching orders", error: error.message });
         }
@@ -111,6 +111,19 @@ class orderController {
             res.status(500).json({ message: "Error updating order", error: error.message });
         }
     };
+
+    // getAllOrders admin 
+    static admingetAllorders = async (req, res) => {
+        try {
+            const adminAllOrders = await orderModal.find().populate("userId").populate("shippingAddress", "street village city zipCode phone").populate("products", "name size price quantity image");
+            if(!adminAllOrders || adminAllOrders.length === 0){
+                return res.status(404).json({ message: "No orders found" });
+            }
+            res.status(200).json({ massage: "Orders fetched successfully",count:adminAllOrders.length, adminAllOrders });
+        } catch (error) {
+            console.log("error in admin get all orders", error)
+        }
+    }
 
 }
 
