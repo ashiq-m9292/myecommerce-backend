@@ -1,5 +1,7 @@
 import userModel from "../models/userModal.js";
 import cloudinary from "cloudinary";
+import { sendNotification } from "../services/sendNotification.js";
+
 
 class userController {
 
@@ -33,8 +35,8 @@ class userController {
     // loginUser function
     static loginUser = async (req, res) => {
         try {
-            const { email, password } = req.body;
-            if (!email || !password) {
+            const { email, password, fcmToken } = req.body;
+            if (!email || !password || !fcmToken) {
                 return res.status(400).json({ message: "Please fill all the fields" });
             }
             // check if user exists
@@ -49,6 +51,16 @@ class userController {
                 return res.status(400).json({ message: "Invalid credentials" });
             };
 
+            // update fcm token
+            existingUser.fcmToken = fcmToken;
+            await existingUser.save();
+
+            await sendNotification(
+                fcmToken,
+                "login Successful",
+                `Hello ${existingUser.name}, you have successfully logged in.`,
+                { screen: "Home" }
+            );
             // jwt token function
             const token = await existingUser.jwtToken();
             res.cookie("token", token, {
@@ -56,7 +68,7 @@ class userController {
                 secure: 'true',
                 sameSite: 'none',
                 maxAge: 1 * 30 * 24 * 60 * 60 * 1000, // 1 month
-            }).status(200).json({ message: "User login successfully", _id: existingUser._id, name: existingUser.name, email: existingUser.email, token, role: existingUser.role });
+            }).status(200).json({ message: "User login successfully", _id: existingUser._id, name: existingUser.name, email: existingUser.email, token, role: existingUser.role, fcmToken });
         } catch (error) {
             res.status(500).json({ message: "Error logging in user", error: error.message });
         }
@@ -111,7 +123,7 @@ class userController {
     // get user profile
     static getUserProfile = async (req, res) => {
         try {
-            const user = await userModel.findOne({_id: req.user.id}).select("-password");
+            const user = await userModel.findOne({ _id: req.user.id }).select("-password");
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
