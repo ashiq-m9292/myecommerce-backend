@@ -52,15 +52,21 @@ class userController {
             };
 
             // update fcm token
-            existingUser.fcmToken = fcmToken;
-            await existingUser.save();
-
-            await sendNotification(
-                "login",
-                `Hello ${existingUser.name}, you have successfully logged in.`,
-                { screen: "Home" },
-                fcmToken
-            );
+            if (fcmToken) {
+                existingUser.fcmToken = fcmToken;
+                await existingUser.save();
+            }
+            // send notification on login
+            if (!existingUser.fcmToken) {
+                return res.status(400).json({ message: "Please update your fcm token" });
+            } else {
+                await sendNotification(
+                    existingUser.fcmToken,
+                    "Login Successful",
+                    `Hello ${existingUser.name}, you have successfully logged in.`,
+                    { screen: "Home" }
+                );
+            };
             // jwt token function
             const token = await existingUser.jwtToken();
             res.cookie("token", token, {

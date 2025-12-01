@@ -7,7 +7,7 @@ export const sendNotification = async (fcmToken, title, body, data = {}) => {
                 title: title,
                 body: body,
             },
-            data: data,
+            data,
             token: fcmToken,
         };
         await admin.messaging().send(message);
