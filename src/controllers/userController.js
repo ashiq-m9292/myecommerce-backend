@@ -56,10 +56,10 @@ class userController {
             await existingUser.save();
 
             await sendNotification(
-                fcmToken,
-                "login Successful",
+                "login",
                 `Hello ${existingUser.name}, you have successfully logged in.`,
-                { screen: "Home" }
+                { screen: "Home" },
+                fcmToken
             );
             // jwt token function
             const token = await existingUser.jwtToken();
